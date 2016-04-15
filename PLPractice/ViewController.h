@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "SecondViewController.h"
 
 @interface ViewController : UIViewController
-
 
 @end
 

@@ -14,6 +14,8 @@
 		22113B571CBEF92C0003A238 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22113B561CBEF92C0003A238 /* Assets.xcassets */; };
 		22113B5A1CBEF92C0003A238 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22113B581CBEF92C0003A238 /* LaunchScreen.storyboard */; };
 		22113B651CBEF92C0003A238 /* PLPracticeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22113B641CBEF92C0003A238 /* PLPracticeTests.m */; };
+		22113B711CC138650003A238 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22113B701CC138650003A238 /* SecondViewController.m */; };
+		22113B771CC14F770003A238 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22113B761CC14F770003A238 /* NavigationController.m */; };
 		D45BCF96721688BA9445E0DA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F2BCEE0B45DE974BDD5A1 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +43,10 @@
 		22113B601CBEF92C0003A238 /* PLPracticeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PLPracticeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22113B641CBEF92C0003A238 /* PLPracticeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLPracticeTests.m; sourceTree = "<group>"; };
 		22113B661CBEF92C0003A238 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		22113B6F1CC138650003A238 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
+		22113B701CC138650003A238 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		22113B751CC14F770003A238 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
+		22113B761CC14F770003A238 /* NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationController.m; sourceTree = "<group>"; };
 		4C3F2BCEE0B45DE974BDD5A1 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E82735C98B56CB29B4E4F6C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		F3D23D75A9C8303B52920B72 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -99,8 +105,12 @@
 			children = (
 				22113B4D1CBEF92C0003A238 /* AppDelegate.h */,
 				22113B4E1CBEF92C0003A238 /* AppDelegate.m */,
+				22113B751CC14F770003A238 /* NavigationController.h */,
+				22113B761CC14F770003A238 /* NavigationController.m */,
 				22113B501CBEF92C0003A238 /* ViewController.h */,
 				22113B511CBEF92C0003A238 /* ViewController.m */,
+				22113B6F1CC138650003A238 /* SecondViewController.h */,
+				22113B701CC138650003A238 /* SecondViewController.m */,
 				22113B531CBEF92C0003A238 /* Main.storyboard */,
 				22113B561CBEF92C0003A238 /* Assets.xcassets */,
 				22113B581CBEF92C0003A238 /* LaunchScreen.storyboard */,
@@ -270,7 +280,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22113B711CC138650003A238 /* SecondViewController.m in Sources */,
 				22113B521CBEF92C0003A238 /* ViewController.m in Sources */,
+				22113B771CC14F770003A238 /* NavigationController.m in Sources */,
 				22113B4F1CBEF92C0003A238 /* AppDelegate.m in Sources */,
 				22113B4C1CBEF92C0003A238 /* main.m in Sources */,
 			);
@@ -400,6 +412,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = PLPractice/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ddistant.PLPractice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -412,6 +425,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = PLPractice/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ddistant.PLPractice;
 				PRODUCT_NAME = "$(TARGET_NAME)";

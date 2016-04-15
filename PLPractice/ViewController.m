@@ -23,29 +23,49 @@
 @property (nonatomic) ALView *greenView;
 @property (nonatomic) ALView *yellowView;
 
+@property (nonatomic) NSArray *colors;
+@property (nonatomic) NSUInteger colorCount;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.title = @"Shapes & Colors";
+    
 }
 
+
 -(void)viewDidAppear:(BOOL)animated {
+    
+    self.view.layer.backgroundColor = [UIColor whiteColor].CGColor;
     
     [self createViews];
     [self addViews];
     [self updateAllConstraints];
+    [self setupColorArray];
     [self addTapGestureRecognizer];
+    [self addSwipeGestureRecognizer];
 }
 
 - (void) createViews {
     
     self.purpleView = [ALView newAutoLayoutView];
+    self.purpleView.layer.backgroundColor = [UIColor purpleColor].CGColor;
+    
     self.redView = [ALView newAutoLayoutView];
+    self.redView.layer.backgroundColor = [UIColor redColor].CGColor;
+    
     self.blueView = [ALView newAutoLayoutView];
+    self.blueView.layer.backgroundColor = [UIColor blueColor].CGColor;
+    
     self.greenView = [ALView newAutoLayoutView];
+    self.greenView.layer.backgroundColor = [UIColor greenColor].CGColor;
+    
     self.yellowView = [ALView newAutoLayoutView];
+    self.yellowView.layer.backgroundColor = [UIColor yellowColor].CGColor;
     
 }
 
@@ -57,6 +77,13 @@
     [self.view addSubview:self.greenView];
     [self.view addSubview:self.yellowView];
 }
+
+-(void) setupColorArray {
+    self.colors = @[[UIColor blackColor], [UIColor grayColor], [UIColor orangeColor], [UIColor lightTextColor], [UIColor brownColor], [UIColor purpleColor]];
+    self.colorCount = 0;
+}
+
+#pragma mark - pure layout
 
 -(void) updateAllConstraints {
     
@@ -72,7 +99,6 @@
     if (!self.didSetupPurpleConstraints) {
         [NSLayoutConstraint autoCreateAndInstallConstraints:^{
             [self.purpleView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(15.0, 15.0, 15.0, 15.0)];
-            self.purpleView.layer.backgroundColor = [UIColor purpleColor].CGColor;
         }];
     }
     
@@ -86,7 +112,6 @@
         [NSLayoutConstraint autoCreateAndInstallConstraints:^{
             [self.redView autoCenterInSuperview];
             [self.redView autoSetDimensionsToSize:CGSizeMake(100.0, 100.0)];
-            self.redView.layer.backgroundColor = [UIColor redColor].CGColor;
         }];
         
         self.didSetupRedConstraints = YES;
@@ -101,7 +126,6 @@
             [self.blueView autoSetDimensionsToSize:CGSizeMake(200.0, 30.0)];
             [self.blueView autoPinEdge:ALEdgeBottom toEdge:ALEdgeTop ofView:self.redView];
             [self.blueView autoPinEdgeToSuperviewEdge:ALEdgeRight withInset:5.0];
-            self.blueView.layer.backgroundColor = [UIColor blueColor].CGColor;
         }];
         
         self.didSetupBlueConstraints = YES;
@@ -116,7 +140,6 @@
             [self.greenView autoSetDimensionsToSize:CGSizeMake(50.0, 250.0)];
             [self.greenView autoPinEdge:ALEdgeLeft toEdge:ALEdgeLeft ofView:self.purpleView withOffset:10.0];
             [self.greenView autoAlignAxis:ALAxisHorizontal toSameAxisOfView:self.redView];
-            self.greenView.layer.backgroundColor = [UIColor greenColor].CGColor;
         }];
         
         self.didSetupGreenConstraints = YES;
@@ -131,7 +154,6 @@
             [self.yellowView autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:30.0];
             [self.yellowView autoAlignAxis:ALAxisVertical toSameAxisOfView:self.redView];
             [self.yellowView autoSetDimensionsToSize:CGSizeMake(100.0, 100.0)];
-            self.yellowView.layer.backgroundColor = [UIColor yellowColor].CGColor;
         }];
         
         self.didSetupYellowConstraints = YES;
@@ -146,6 +168,8 @@
     self.didSetupBlueConstraints = NO;
 }
 
+#pragma mark - gesture recognizers
+
 -(void) addTapGestureRecognizer {
     
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognizerTapped:)];
@@ -158,13 +182,32 @@
 
 -(void) tapGestureRecognizerTapped:(UITapGestureRecognizer *)recognizer {
     
-    NSInteger transformerPicker = arc4random_uniform(3); //use this to randomize which method is called
+//    NSInteger transformerPicker = arc4random_uniform(3); //use this to randomize which method is called
     
     [self shrinkRedView];
     [self moveYellowView];
     [self rotateGreenView];
     [self fadeBlueView];
+    [self recolorPurpleView];
 }
+
+-(void) addSwipeGestureRecognizer {
+    
+    UISwipeGestureRecognizer *swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeGestureRecognizerSwiped:)];
+    
+    swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+    
+    [self.view addGestureRecognizer:swipeGestureRecognizer];
+}
+
+-(void) swipeGestureRecognizerSwiped:(UISwipeGestureRecognizer *)recognizer {
+    
+    SecondViewController *secondViewController = [[SecondViewController alloc] init];
+    [self.navigationController pushViewController:secondViewController animated:YES];
+    
+}
+
+#pragma mark - translate, scale and rotating views
 
 -(void) shrinkRedView {
     
@@ -220,6 +263,29 @@
     } completion:^(BOOL finished) {
         [self updateAllConstraints];
     }];
+}
+
+-(void) recolorPurpleView {
+    
+    [self undoConstraints];
+    
+    [UIView animateWithDuration:1.0 animations:^{
+        self.purpleView.layer.backgroundColor = [self pickColor].CGColor;
+        
+    } completion:^(BOOL finished) {
+        [self updateAllConstraints];
+    }];
+}
+
+-(UIColor *) pickColor {
+    
+    self.colorCount++;
+    
+    if (self.colorCount >= self.colors.count) {
+        self.colorCount = 0;
+    }
+    
+    return self.colors[self.colorCount];
 }
 
 

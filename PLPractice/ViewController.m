@@ -48,6 +48,7 @@
     [self setupColorArray];
     [self addTapGestureRecognizer];
     [self addSwipeGestureRecognizer];
+    [self showPrompt];
 }
 
 - (void) createViews {
@@ -81,6 +82,27 @@
 -(void) setupColorArray {
     self.colors = @[[UIColor blackColor], [UIColor grayColor], [UIColor orangeColor], [UIColor lightTextColor], [UIColor brownColor], [UIColor purpleColor]];
     self.colorCount = 0;
+}
+
+-(void) showPrompt {
+    
+    double delayInSeconds = 2.0;
+    
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    
+    dispatch_after(popTime, dispatch_get_main_queue(), ^{
+        if (self.colorCount == 0) {
+            [self.navigationItem setPrompt:@"Double tap to change the views!"];
+        }
+        
+        [self performSelector:@selector(hidePrompt) withObject:self afterDelay:4.0];
+    });
+    
+}
+
+-(void) hidePrompt {
+    
+    [self.navigationItem setPrompt:nil];
 }
 
 #pragma mark - pure layout

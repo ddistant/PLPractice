@@ -16,6 +16,7 @@
 		22113B651CBEF92C0003A238 /* PLPracticeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22113B641CBEF92C0003A238 /* PLPracticeTests.m */; };
 		22113B711CC138650003A238 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22113B701CC138650003A238 /* SecondViewController.m */; };
 		22113B771CC14F770003A238 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22113B761CC14F770003A238 /* NavigationController.m */; };
+		22A7354E1CCFE72C00DA36E5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22A7354D1CCFE72C00DA36E5 /* QuartzCore.framework */; };
 		D45BCF96721688BA9445E0DA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F2BCEE0B45DE974BDD5A1 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,7 @@
 		22113B701CC138650003A238 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 		22113B751CC14F770003A238 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
 		22113B761CC14F770003A238 /* NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationController.m; sourceTree = "<group>"; };
+		22A7354D1CCFE72C00DA36E5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4C3F2BCEE0B45DE974BDD5A1 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E82735C98B56CB29B4E4F6C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		F3D23D75A9C8303B52920B72 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22A7354E1CCFE72C00DA36E5 /* QuartzCore.framework in Frameworks */,
 				D45BCF96721688BA9445E0DA /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,6 +143,7 @@
 		6FFBF0DD97C25AAF590BE900 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22A7354D1CCFE72C00DA36E5 /* QuartzCore.framework */,
 				4C3F2BCEE0B45DE974BDD5A1 /* libPods.a */,
 			);
 			name = Frameworks;

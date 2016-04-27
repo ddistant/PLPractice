@@ -44,6 +44,10 @@
 @property (nonatomic) UILabel *sixLabel;
 @property (nonatomic) UILabel *nineLabel;
 
+@property (nonatomic) NSTimer *timer;
+
+@property (nonatomic) int degrees;
+
 
 @property (nonatomic) BOOL didSetupClockViewConstraints;
 
@@ -56,10 +60,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"Clock";
+    self.degrees = 0;
     
     self.view.backgroundColor = [UIColor lightGrayColor];
     [self createViewsAndLayers];
-//    [self animateLayers];
+    [self setupTimer];
 
 }
 
@@ -147,8 +152,8 @@
     
     self.oneTwoPath = [UIBezierPath bezierPathWithArcCenter:self.clockView.center
                                                      radius:123
-                                                 startAngle:DEGREES_TO_RADIANS(300)
-                                                   endAngle:DEGREES_TO_RADIANS(340)
+                                                 startAngle:DEGREES_TO_RADIANS(299)
+                                                   endAngle:DEGREES_TO_RADIANS(335)
                                                   clockwise:YES];
     
     CAShapeLayer *oneTwoLayer = [CAShapeLayer layer];
@@ -156,7 +161,7 @@
     [oneTwoLayer setStrokeColor:[UIColor grayColor].CGColor];
     [oneTwoLayer setFillColor:[UIColor clearColor].CGColor];
     oneTwoLayer.lineWidth = 15;
-    oneTwoLayer.lineDashPattern = @[@5, @65];
+    oneTwoLayer.lineDashPattern = @[@6, @58.5];
     oneTwoLayer.strokeStart = 0.0;
     oneTwoLayer.strokeEnd = 1.0;
     
@@ -166,8 +171,8 @@
     
     UIBezierPath *fourFivePath = [UIBezierPath bezierPathWithArcCenter:self.clockView.center
                                                      radius:123
-                                                 startAngle:DEGREES_TO_RADIANS(25)
-                                                   endAngle:DEGREES_TO_RADIANS(70)
+                                                 startAngle:DEGREES_TO_RADIANS(29)
+                                                   endAngle:DEGREES_TO_RADIANS(75)
                                                   clockwise:YES];
     
     CAShapeLayer *fourFiveLayer = [CAShapeLayer layer];
@@ -175,7 +180,7 @@
     [fourFiveLayer setStrokeColor:[UIColor grayColor].CGColor];
     [fourFiveLayer setFillColor:[UIColor clearColor].CGColor];
     fourFiveLayer.lineWidth = 15;
-    fourFiveLayer.lineDashPattern = @[@5, @65];
+    fourFiveLayer.lineDashPattern = @[@6, @58.5];
     fourFiveLayer.strokeStart = 0.0;
     fourFiveLayer.strokeEnd = 1.0;
     
@@ -185,8 +190,8 @@
     
     UIBezierPath *sevenEightPath = [UIBezierPath bezierPathWithArcCenter:self.clockView.center
                                                                 radius:123
-                                                            startAngle:DEGREES_TO_RADIANS(120)
-                                                              endAngle:DEGREES_TO_RADIANS(160)
+                                                            startAngle:DEGREES_TO_RADIANS(119)
+                                                              endAngle:DEGREES_TO_RADIANS(155)
                                                              clockwise:YES];
     
     CAShapeLayer *sevenEightLayer = [CAShapeLayer layer];
@@ -194,7 +199,7 @@
     [sevenEightLayer setStrokeColor:[UIColor grayColor].CGColor];
     [sevenEightLayer setFillColor:[UIColor clearColor].CGColor];
     sevenEightLayer.lineWidth = 15;
-    sevenEightLayer.lineDashPattern = @[@5, @65];
+    sevenEightLayer.lineDashPattern = @[@6, @58.5];
     sevenEightLayer.strokeStart = 0.0;
     sevenEightLayer.strokeEnd = 1.0;
     
@@ -204,8 +209,8 @@
     
     UIBezierPath *tenElevenPath = [UIBezierPath bezierPathWithArcCenter:self.clockView.center
                                                                   radius:123
-                                                              startAngle:DEGREES_TO_RADIANS(205)
-                                                                endAngle:DEGREES_TO_RADIANS(250)
+                                                              startAngle:DEGREES_TO_RADIANS(209)
+                                                                endAngle:DEGREES_TO_RADIANS(255)
                                                                clockwise:YES];
     
     CAShapeLayer *tenElevenLayer = [CAShapeLayer layer];
@@ -213,11 +218,24 @@
     [tenElevenLayer setStrokeColor:[UIColor grayColor].CGColor];
     [tenElevenLayer setFillColor:[UIColor clearColor].CGColor];
     tenElevenLayer.lineWidth = 15;
-    tenElevenLayer.lineDashPattern = @[@5, @65];
+    tenElevenLayer.lineDashPattern = @[@6, @58.5];
     tenElevenLayer.strokeStart = 0.0;
     tenElevenLayer.strokeEnd = 1.0;
     
     [self.view.layer addSublayer:tenElevenLayer];
+    
+    //second hand
+    
+    self.secondHandLayer = [CAShapeLayer layer];
+    [self.secondHandLayer setPath:[UIBezierPath bezierPathWithRect:CGRectMake(0, -120, 1, 120)].CGPath];
+    [self.secondHandLayer setStrokeColor:[UIColor redColor].CGColor];
+    [self.secondHandLayer setFillColor:[UIColor redColor].CGColor];
+    self.secondHandLayer.position = CGPointMake(self.clockView.bounds.size.width / 2, self.clockView.bounds.size.height / 2);
+    
+    int sublayersCount = (int)self.clockView.layer.sublayers.count;
+    
+    [self.clockView.layer insertSublayer:self.secondHandLayer atIndex:sublayersCount];
+    
     
     //create clock hands
     
@@ -229,95 +247,83 @@
 //    [self.secondHandLayer setFillColor:[UIColor redColor].CGColor];
     
     //    [self.middleView.layer addSublayer:self.secondHandLayer];
+}
+
+- (void)animateSecondHand {
     
-    UIBezierPath *secondHandPath = [UIBezierPath bezierPathWithArcCenter:self.clockView.center
-                                                                 radius:57.5
-                                                             startAngle:DEGREES_TO_RADIANS(0)
-                                                               endAngle:DEGREES_TO_RADIANS(359)
-                                                              clockwise:YES];
+    if (self.degrees > 360) {
+        self.degrees = 0;
+    }
     
-    self.secondHandLayer = [CAShapeLayer layer];
-    [self.secondHandLayer setPath:secondHandPath.CGPath];
-    [self.secondHandLayer setStrokeColor:[UIColor redColor].CGColor];
-    [self.secondHandLayer setFillColor:[UIColor clearColor].CGColor];
-    self.secondHandLayer.lineWidth = 135;
-    self.secondHandLayer.lineDashPattern = @[@0, @360];
-    self.secondHandLayer.strokeStart = 0.0;
-    self.secondHandLayer.strokeEnd = 1.0;
+    self.secondHandLayer.affineTransform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(self.degrees));
     
-    [self.view.layer addSublayer:self.secondHandLayer];
-    
+    self.degrees += 6;
+}
+
+//- (void)animateArc {
+//
+//    // Create the arc
+//    CGPoint arcStart = CGPointMake(self.nineLabel.frame.origin.x, self.nineLabel.frame.origin.y);
+//    CGPoint arcCenter = self.clockView.center;
+//    CGFloat arcRadius = 123;
+//    
+//    CGMutablePathRef arcPath = CGPathCreateMutable();
+//    CGPathMoveToPoint(arcPath, NULL, arcStart.x, arcStart.y);
+//    CGPathAddArc(arcPath, NULL, arcCenter.x, arcCenter.y, arcRadius, M_PI, 0, NO);
+//    
+//    // The layer we're going to animate (a 50x50pt red box)
+//    UIView* dynamicView = [[UIView alloc] initWithFrame: CGRectMake(self.nineLabel.frame.origin.x, self.nineLabel.frame.origin.y, 100, 2)];
+//    dynamicView.layer.backgroundColor = [[UIColor redColor] CGColor];
+//    [self.clockView addSubview: dynamicView];
+//    dynamicView.center = arcStart;
+//    
+//    // The animation
+//    CAKeyframeAnimation *pathAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+//    pathAnimation.calculationMode = kCAAnimationPaced;
+//    pathAnimation.duration = 5.0;
+//    pathAnimation.path = arcPath;
+//    CGPathRelease(arcPath);
+//    
+//    // Add the animation and reset the state so we can run again.
+//    [CATransaction begin];
+//    [CATransaction setCompletionBlock:^{
+//        //call method again
+//    }];
+//    [dynamicView.layer addAnimation:pathAnimation forKey:@"arc"];
+//    [CATransaction commit];
+//}
+
+//-(void) createSecondHand {
+//    
+
+//}
+
 
     
-    UIBezierPath *minuteRectPath = [UIBezierPath bezierPathWithRect:CGRectMake(7, 7, 3, 135)];
-    
-    self.minuteHandLayer = [CAShapeLayer layer];
-    [self.minuteHandLayer setPath:minuteRectPath.CGPath];
-    [self.minuteHandLayer setStrokeColor:[UIColor blackColor].CGColor];
-    [self.minuteHandLayer setFillColor:[UIColor blackColor].CGColor];
-    
-//    [self.middleView.layer addSublayer:self.minuteHandLayer];
-    
-    UIBezierPath *hourRectPath = [UIBezierPath bezierPathWithRect:CGRectMake(6, 7, 5, -135)];
-    
-    self.hourHandLayer = [CAShapeLayer layer];
-    [self.hourHandLayer setPath:hourRectPath.CGPath];
-    [self.hourHandLayer setStrokeColor:[UIColor blackColor].CGColor];
-    [self.hourHandLayer setFillColor:[UIColor blackColor].CGColor];
+//    UIBezierPath *minuteRectPath = [UIBezierPath bezierPathWithRect:CGRectMake(7, 7, 3, 135)];
+//    
+//    self.minuteHandLayer = [CAShapeLayer layer];
+//    [self.minuteHandLayer setPath:minuteRectPath.CGPath];
+//    [self.minuteHandLayer setStrokeColor:[UIColor blackColor].CGColor];
+//    [self.minuteHandLayer setFillColor:[UIColor blackColor].CGColor];
+//    
+////    [self.middleView.layer addSublayer:self.minuteHandLayer];
+//    
+//    UIBezierPath *hourRectPath = [UIBezierPath bezierPathWithRect:CGRectMake(6, 7, 5, -135)];
+//    
+//    self.hourHandLayer = [CAShapeLayer layer];
+//    [self.hourHandLayer setPath:hourRectPath.CGPath];
+//    [self.hourHandLayer setStrokeColor:[UIColor blackColor].CGColor];
+//    [self.hourHandLayer setFillColor:[UIColor blackColor].CGColor];
     
 //    [self.middleView.layer addSublayer:self.hourHandLayer];
+//}
+
+- (void) setupTimer {
     
+    self.timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(animateSecondHand) userInfo: nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
 }
-
--(void) setupTimer {
-    
-    NSTimer *timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(animateLayers) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-}
-
-//-(void) animateLayers {
-//    
-//    CGRect boundingRect = CGRectMake(-150, -150, 50, 50);
-//    
-//    CAKeyframeAnimation *secondAnimation = [CAKeyframeAnimation animation];
-//    secondAnimation.keyPath = @"position";
-//    secondAnimation.path = CFAutorelease(CGPathCreateWithEllipseInRect(boundingRect, NULL));
-//    secondAnimation.duration = 3;
-//    secondAnimation.additive = YES;
-//    secondAnimation.repeatCount = HUGE_VALF;
-//    secondAnimation.calculationMode = kCAAnimationPaced;
-////    secondAnimation.rotationMode = kCAAnimationRotateAuto;
-//    
-//    [self.secondHandLayer addAnimation:secondAnimation forKey:@"secondAnimation"];
-//    
-//}
-
-//-(void) setupClockViewConstraints {
-//    
-//    if (!self.didSetupClockViewConstraints) {
-//        [NSLayoutConstraint autoCreateAndInstallConstraints:^{
-//            [self.clockView autoCenterInSuperview];
-//            [self.clockView autoSetDimensionsToSize:CGSizeMake(150, 150)];
-//        }];
-//        
-//        self.didSetupClockViewConstraints = YES;
-//    }
-//}
-
-//-(void) createTickViews {
-//    
-//    for (int i = 1; i < 5; i++) {
-//        
-//        UIView *tickView = [[UIView alloc] init];
-//        tickView.backgroundColor = [UIColor redColor];
-//        [self.whiteView addSubview:tickView];
-//        [tickView autoSetDimensionsToSize:CGSizeMake(i, 12.0)];
-//        [tickView autoCenterInSuperview];
-//        tickView.transform = CGAffineTransformMakeTranslation(0.0, 130);
-//        [self rotateView:self.clockView];
-//        
-//    }
-//}
 
 -(void) rotateView:(UIView *)view {
     
